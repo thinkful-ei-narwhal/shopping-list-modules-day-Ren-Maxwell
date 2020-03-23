@@ -1,5 +1,5 @@
 import store from './store.js';
-//import item from './item.js';
+import item from './item.js';
 const generateItemElement = function(item) {
   let itemTitle = `<span class="shopping-item shopping-item__checked">${item.name}</span>`;
   if (!item.checked) {
@@ -41,8 +41,68 @@ const render = function() {
   $('.js-shopping-list').html(shoppingListItemsString);
 };
 
+
+//findAndDelete
+function findAndDelete(id){
+  findByID(id);
+  this.items.filter((number) => number === id);
+}
+
+
+//findAndUpdateName
+function findAndUpdateName(id, newName){
+  try {
+    item.validateName(newName);
+    findByID(id);
+    render();
+    }
+   catch (error) {
+    console.log(`Cannot update name: ${error.message}`);
+  }
+}
+
+//findAndToggleChecked
+function findAndToggleChecked(id){
+  //this will become a cuid kajlshdkjsdfhasdf thing
+  this.findByID(id);
+  return store.hideCheckedItems = true;
+}
+
+
+
+
+//addItem function
+
+function addItem(name){
+  try {
+    item.validateName(name);
+    this.items.push(item.create(name));
+    console.log(store.items);
+    //render();
+  } catch (error) {
+    console.log("I sure love when instructions are specific.");
+  }
+}
+
+//findByID function
+
+function findByID(id){
+  let text = store.items.find(function(){
+    if(id === store.items.id){
+      return id;
+    }
+  });
+}
+
 const addItemToShoppingList = function(itemName) {
-  store.items.push({ id: cuid(), name: itemName, checked: false });
+  try {
+    item.validateName(itemName);
+    store.items.push(item.create(itemName)); 
+    render();
+  } 
+  catch (error) {
+    console.log(`Cannot add item: ${error.message}`);
+  }
 };
 
 const handleNewItemSubmit = function() {
@@ -141,7 +201,12 @@ const bindEventListeners = function() {
 // This object contains the only exposed methods from this module:
 export default {
   render,
-  bindEventListeners
+  bindEventListeners,
+  findByID,
+  findAndToggleChecked,
+  addItem,
+  findAndUpdateName,
+  findAndDelete
 };
 
 /*
