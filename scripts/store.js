@@ -1,17 +1,20 @@
+import item from './item.js';
+
 let items = [];
 let hideCheckedItems = false;
 
 //findAndDelete
 function findAndDelete(id){
-    findByID(id);
-    this.items.filter((number) => number === id);
+    this.findByID(id);
+    const index = this.items.findIndex(item => item.id === id);
+    items.splice(index, 1);
+    this.items = this.items.filter((filteredID) => filteredID.id !== id);
   }
 //findAndUpdateName
 function findAndUpdateName(id, newName){
     try {
-      item.validateName(newName);
-      findByID(id);
-      render();
+      const item = this.findByID(id);
+      return item.name = newName;
       }
      catch (error) {
       console.log(`Cannot update name: ${error.message}`);
@@ -20,28 +23,25 @@ function findAndUpdateName(id, newName){
 //findAndToggleChecked
 function findAndToggleChecked(id){
     //this will become a cuid kajlshdkjsdfhasdf thing
-    this.findByID(id);
-    return store.hideCheckedItems = true;
+    let foundItem = this.findByID(id);
+    return foundItem.checked = !foundItem.checked; 
+}
+function toggleCheckedFilter(){
+  return this.hideCheckedItems = !this.hideCheckedItems;
 }
 //addItem function
 function addItem(name){
     try {
       item.validateName(name);
       this.items.push(item.create(name));
-      console.log(store.items);
-      //render();
     } catch (error) {
-      console.log("I sure love when instructions are specific.");
+      console.log(error);
     }
   }
   
-//findByID function 
+//findByID function finds the object in the array
 function findByID(id){
-    let text = store.items.find(function(){
-      if(id === store.items.id){
-        return id;
-      }
-    });
+    return items.find((idnumber) => idnumber.id === id);
 }
 export default
 {
@@ -51,5 +51,6 @@ findByID,
 findAndToggleChecked,
 addItem,
 findAndUpdateName,
-findAndDelete
+findAndDelete,
+toggleCheckedFilter
 }
